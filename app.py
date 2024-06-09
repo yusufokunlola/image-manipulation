@@ -27,7 +27,8 @@ def process_image(image):
     return bw_path, rcz_path
 
 # Streamlit app
-st.title("Image Processing App")
+st.title("PhotoWizard: From Color to Classic")
+st.write("The app enables users to upload original images and converts them to grayscale, rendering them in black and white.")
 st.write("Upload an image to process it.")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
@@ -52,3 +53,7 @@ if uploaded_file is not None:
             file_name=os.path.basename(bw_path),
             mime="image/jpeg"
         )
+        
+st.text('')
+st.text('')
+st.markdown('`Code:` [GitHub](https://github.com/yusufokunlola/image-manipulation)')
