@@ -42,23 +42,13 @@ if uploaded_file is not None:
     # Display processed images
     st.write("Processed Images:")
     bw_image = Image.open(bw_path)
-    rcz_image = Image.open(rcz_path)
     st.image(bw_image, caption='Grayscale Image', use_column_width=True)
-    st.image(rcz_image, caption='Rotated, Cropped, and Resized Image', use_column_width=True)
 
-    # Provide download links for processed images
+    # Provide download link for grayscale image
     with open(bw_path, "rb") as file:
         btn = st.download_button(
             label="Download Grayscale Image",
             data=file,
             file_name=os.path.basename(bw_path),
-            mime="image/jpeg"
-        )
-
-    with open(rcz_path, "rb") as file:
-        btn = st.download_button(
-            label="Download Rotated, Cropped, and Resized Image",
-            data=file,
-            file_name=os.path.basename(rcz_path),
             mime="image/jpeg"
         )
