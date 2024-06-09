@@ -1,59 +1,41 @@
 import streamlit as st
 from PIL import Image
 from pathlib import Path
-import os
-
-# Create directories to save images if they don't exist
-if not os.path.exists("saved_images"):
-    os.makedirs("saved_images")
 
 # Function to process image
-def process_image(image):
-    img = Image.open(image)
-    stem = Path(image.name).stem
-
-    # Create paths to save files to
-    bw_path = "saved_images/bw_{}.jpg".format(stem)
-    rcz_path = "saved_images/rcz_{}.jpg".format(stem)
-
-    # Convert image to grayscale
-    bw = img.convert('L')
-    bw.save(bw_path)
-
-    # Rotate, crop, and resize grayscale image
-    rcz = bw.rotate(45).crop((25, 25, 75, 75)).resize((100, 100))
-    rcz.save(rcz_path)
-
-    return bw_path, rcz_path
+def process_image(path):
+    img = Image.open(path)
+    bw = img.convert('L')  # Convert image to grayscale
+    return bw
 
 # Streamlit app
 st.title("PhotoWizard: From Color to Classic")
 st.write("The app enables users to upload original images and converts them to grayscale, rendering them in black and white.")
 st.write("Upload an image to process it.")
 
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+# Upload image
+uploaded_image = st.file_uploader("Upload Image", type=["jpg", "png", "jpeg"])
 
-if uploaded_file is not None:
-    # Display the uploaded image
-    st.image(uploaded_file, caption='Uploaded Image', use_column_width=True)
+if uploaded_image is not None:
+    # Display original image
+    st.image(uploaded_image, caption="Original Image", use_column_width=True)
 
-    # Process the image
-    bw_path, rcz_path = process_image(uploaded_file)
+    # Process uploaded image
+    processed_image = process_image(uploaded_image)
+    
+    # Display grayscale image
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(processed_image, caption="Grayscale Image", use_column_width=True)
 
-    # Display processed images
-    st.write("Processed Images:")
-    bw_image = Image.open(bw_path)
-    st.image(bw_image, caption='Grayscale Image', use_column_width=True)
+    # Save grayscale image
+    save_button = st.button("Save Grayscale Image")
+    if save_button:
+        bw_path = "saved_image.jpg"
+        processed_image.save(bw_path)
+        st.success(f"Grayscale image saved as {bw_path}")
 
-    # Provide download link for grayscale image
-    with open(bw_path, "rb") as file:
-        btn = st.download_button(
-            label="Download Grayscale Image",
-            data=file,
-            file_name=os.path.basename(bw_path),
-            mime="image/jpeg"
-        )
-        
+
 st.text('')
 st.text('')
 st.markdown('`Code:` [GitHub](https://github.com/yusufokunlola/image-manipulation)')
