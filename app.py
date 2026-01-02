@@ -109,11 +109,11 @@ if uploaded_file:
     st.image(bw_image, caption="Grayscale (JPEG)", use_column_width=True)
 
     with open(bw_path, "rb") as f:
-        st.download_button(
-            label="Download Grayscale JPEG",
-            data=f,
-            file_name=os.path.basename(bw_path),
-            mime="image/jpeg"
-        )
+    st.download_button(
+        label="Download Grayscale Image",
+        data=f,
+        file_name=f"bw_{stem}.jpeg",   # 👈 force .jpeg here
+        mime="image/jpeg"
+    )
 
 st.markdown('`Code:` [GitHub](https://github.com/yusufokunlola/image-manipulation)')
